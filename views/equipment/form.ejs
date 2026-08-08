@@ -1,0 +1,26 @@
+<%- include('../partials/header') %>
+<h1><%= equipment && equipment.id ? 'Επεξεργασία εξοπλισμού' : 'Νέος εξοπλισμός' %></h1>
+<% if (error) { %><div class="error"><%= error %></div><% } %>
+<div class="card">
+  <form method="post" action="<%= equipment && equipment.id ? '/equipment/' + equipment.id : '/equipment' %>">
+    <div class="form-group">
+      <label>Όνομα</label>
+      <input type="text" name="name" value="<%= (equipment && equipment.name) || '' %>" required>
+    </div>
+    <div class="form-group">
+      <label>Σειριακός αριθμός</label>
+      <input type="text" name="serial_number" value="<%= (equipment && equipment.serial_number) || '' %>" required>
+    </div>
+    <div class="form-group">
+      <label>Κατηγορία</label>
+      <input type="text" name="category" value="<%= (equipment && equipment.category) || '' %>">
+    </div>
+    <div class="form-group">
+      <label>Περιγραφή</label>
+      <textarea name="description" rows="3"><%= (equipment && equipment.description) || '' %></textarea>
+    </div>
+    <button type="submit" class="btn">Αποθήκευση</button>
+    <a href="/equipment" class="btn secondary">Ακύρωση</a>
+  </form>
+</div>
+<%- include('../partials/footer') %>

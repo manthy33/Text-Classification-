@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+<h1>Νέα χρέωση εξοπλισμού</h1>
+<% if (error) { %><div class="error"><%= error %></div><% } %>
+<div class="card">
+  <form method="post" action="/assignments">
+    <div class="form-group">
+      <label>Εξοπλισμός</label>
+      <select name="equipment_id" required>
+        <option value="">-- Επιλέξτε --</option>
+        <% availableEquipment.forEach(function(item) { %>
+          <option value="<%= item.id %>" <%= form.equipment_id == item.id ? 'selected' : '' %>>
+            <%= item.name %> (<%= item.serial_number %>)
+          </option>
+        <% }); %>
+      </select>
+      <% if (availableEquipment.length === 0) { %>
+        <p class="muted">Δεν υπάρχει διαθέσιμος εξοπλισμός προς χρέωση αυτή τη στιγμή.</p>
+      <% } %>
+    </div>
+    <div class="form-group">
+      <label>Χρεώνεται σε (όνομα ατόμου/τμήματος)</label>
+      <input type="text" name="assigned_to" value="<%= form.assigned_to || '' %>" required>
+    </div>
+    <div class="form-group">
+      <label>Σημειώσεις</label>
+      <textarea name="notes" rows="3"><%= form.notes || '' %></textarea>
+    </div>
+    <button type="submit" class="btn" <%= availableEquipment.length === 0 ? 'disabled' : '' %>>Καταχώρηση χρέωσης</button>
+    <a href="/assignments" class="btn secondary">Ακύρωση</a>
+  </form>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+<h1>Λεπτομέρειες χρέωσης</h1>
+<div class="card">
+  <p><strong>Εξοπλισμός:</strong> <%= assignment.equipment_name %> (<%= assignment.serial_number %>)</p>
+  <p><strong>Χρεώνεται σε:</strong> <%= assignment.assigned_to %></p>
+  <p><strong>Τεχνικός:</strong> <%= assignment.technician_name %></p>
+  <p><strong>Ημερομηνία χρέωσης:</strong> <%= assignment.assigned_at %></p>
+  <% if (assignment.notes) { %><p><strong>Σημειώσεις χρέωσης:</strong> <%= assignment.notes %></p><% } %>
+  <p><strong>Κατάσταση:</strong>
+    <span class="badge <%= assignment.returned_at ? 'available' : 'assigned' %>">
+      <%= assignment.returned_at ? 'Επιστράφηκε' : 'Ενεργή' %>
+    </span>
+  </p>
+  <% if (assignment.returned_at) { %>
+    <p><strong>Ημερομηνία αποχρέωσης:</strong> <%= assignment.returned_at %></p>
+    <% if (assignment.return_notes) { %><p><strong>Σημειώσεις αποχρέωσης:</strong> <%= assignment.return_notes %></p><% } %>
+  <% } %>
+
+  <% if (!assignment.returned_at && (currentUser.role === 'admin' || currentUser.id === assignment.technician_id)) { %>
+    <hr>
+    <h2>Αποχρέωση εξοπλισμού</h2>
+    <form method="post" action="/assignments/<%= assignment.id %>/return">
+      <div class="form-group">
+        <label>Σημειώσεις επιστροφής (προαιρετικό)</label>
+        <textarea name="return_notes" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn">Αποχρέωση</button>
+    </form>
+  <% } %>
+
+  <a href="/assignments" class="btn secondary" style="margin-top:16px; display:inline-block;">Πίσω στη λίστα</a>
+</div>
+<%- include('../partials/footer') %>

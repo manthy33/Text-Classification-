@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+<h1>Αρχική</h1>
+<div class="stats">
+  <div class="stat">
+    <div class="value"><%= totalEquipment %></div>
+    <div class="label">Σύνολο εξοπλισμού</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= availableEquipment %></div>
+    <div class="label">Διαθέσιμος</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= assignedEquipment %></div>
+    <div class="label">Χρεωμένος</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= myActiveAssignments %></div>
+    <div class="label">Οι δικές μου ενεργές χρεώσεις</div>
+  </div>
+</div>
+<div class="actions">
+  <a href="/assignments/new" class="btn">Νέα χρέωση εξοπλισμού</a>
+  <a href="/equipment" class="btn secondary">Προβολή εξοπλισμού</a>
+  <a href="/assignments" class="btn secondary">Οι χρεώσεις μου</a>
+</div>
+<%- include('partials/footer') %>

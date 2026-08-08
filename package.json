@@ -1,0 +1,20 @@
+{
+  "name": "equipment-manager",
+  "version": "1.0.0",
+  "description": "Διαχείριση χρέωσης / αποχρέωσης εξοπλισμού με ειδοποιήσεις email και δικαιώματα ανά τεχνικό",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "nodemailer": "^9.0.5"
+  }
+}

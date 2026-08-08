@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Διαχείριση Εξοπλισμού</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<% if (typeof currentUser !== 'undefined' && currentUser) { %>
+<header class="topbar">
+  <div class="brand"><a href="/">Διαχείριση Εξοπλισμού</a></div>
+  <nav>
+    <a href="/">Αρχική</a>
+    <a href="/equipment">Εξοπλισμός</a>
+    <a href="/assignments">Χρεώσεις</a>
+    <% if (currentUser.role === 'admin') { %>
+      <a href="/users">Χρήστες</a>
+    <% } %>
+  </nav>
+  <div class="user-info">
+    <span><%= currentUser.full_name %> (<%= currentUser.role === 'admin' ? 'Διαχειριστής' : 'Τεχνικός' %>)</span>
+    <form action="/logout" method="post" style="display:inline">
+      <button type="submit" class="link-button">Αποσύνδεση</button>
+    </form>
+  </div>
+</header>
+<% } %>
+<main class="container">

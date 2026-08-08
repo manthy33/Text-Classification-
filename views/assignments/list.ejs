@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+<h1><%= isAdmin ? 'Όλες οι χρεώσεις' : 'Οι χρεώσεις μου' %></h1>
+<div class="actions">
+  <a href="/assignments/new" class="btn">Νέα χρέωση</a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>Εξοπλισμός</th>
+      <th>Παραλήπτης</th>
+      <% if (isAdmin) { %><th>Τεχνικός</th><% } %>
+      <th>Ημ/νία χρέωσης</th>
+      <th>Ημ/νία αποχρέωσης</th>
+      <th>Κατάσταση</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% assignments.forEach(function(a) { %>
+    <tr>
+      <td><%= a.equipment_name %> (<%= a.serial_number %>)</td>
+      <td><%= a.assigned_to %></td>
+      <% if (isAdmin) { %><td><%= a.technician_name %></td><% } %>
+      <td><%= a.assigned_at %></td>
+      <td><%= a.returned_at || '-' %></td>
+      <td>
+        <span class="badge <%= a.returned_at ? 'available' : 'assigned' %>">
+          <%= a.returned_at ? 'Επιστράφηκε' : 'Ενεργή' %>
+        </span>
+      </td>
+      <td>
+        <a href="/assignments/<%= a.id %>">Λεπτομέρειες</a>
+      </td>
+    </tr>
+    <% }); %>
+    <% if (assignments.length === 0) { %>
+    <tr><td colspan="7" class="muted">Δεν υπάρχουν χρεώσεις.</td></tr>
+    <% } %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>

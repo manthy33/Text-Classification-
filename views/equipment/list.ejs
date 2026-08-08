@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+<h1>Εξοπλισμός</h1>
+<% if (currentUser.role === 'admin') { %>
+<div class="actions">
+  <a href="/equipment/new" class="btn">Νέος εξοπλισμός</a>
+</div>
+<% } %>
+<table>
+  <thead>
+    <tr>
+      <th>Όνομα</th>
+      <th>Σειριακός αριθμός</th>
+      <th>Κατηγορία</th>
+      <th>Κατάσταση</th>
+      <% if (currentUser.role === 'admin') { %><th></th><% } %>
+    </tr>
+  </thead>
+  <tbody>
+    <% equipment.forEach(function(item) { %>
+    <tr>
+      <td><%= item.name %></td>
+      <td><%= item.serial_number %></td>
+      <td><%= item.category || '-' %></td>
+      <td><span class="badge <%= item.status %>"><%= item.status === 'available' ? 'Διαθέσιμος' : 'Χρεωμένος' %></span></td>
+      <% if (currentUser.role === 'admin') { %>
+      <td>
+        <a href="/equipment/<%= item.id %>/edit">Επεξεργασία</a>
+        <% if (item.status === 'available') { %>
+          <form class="inline" method="post" action="/equipment/<%= item.id %>/delete" onsubmit="return confirm('Διαγραφή εξοπλισμού;');">
+            <button type="submit" class="link-button">Διαγραφή</button>
+          </form>
+        <% } %>
+      </td>
+      <% } %>
+    </tr>
+    <% }); %>
+    <% if (equipment.length === 0) { %>
+    <tr><td colspan="5" class="muted">Δεν υπάρχει καταχωρημένος εξοπλισμός.</td></tr>
+    <% } %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>
