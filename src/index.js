@@ -1,4 +1,8 @@
 require('dotenv').config();
+const dns = require('dns');
+// Πολλά hosting containers (π.χ. Railway) δεν έχουν εξερχόμενη IPv6 δικτύωση,
+// οπότε προτιμάμε πάντα IPv4 όταν το Node κάνει DNS resolution (π.χ. για SMTP).
+dns.setDefaultResultOrder('ipv4first');
 const path = require('path');
 const express = require('express');
 const session = require('express-session');

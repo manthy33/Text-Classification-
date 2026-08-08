@@ -11,9 +11,6 @@ const transporter = hasSmtpConfig
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-      // Πολλά hosting containers (π.χ. Railway) δεν έχουν εξερχόμενη IPv6 δικτύωση,
-      // οπότε αναγκάζουμε τη σύνδεση SMTP να γίνεται μέσω IPv4.
-      family: 4,
     })
   : null;
 
