@@ -11,27 +11,19 @@ function canAccess(assignment, sessionUser) {
   return sessionUser.role === 'admin' || assignment.technician_id === sessionUser.id;
 }
 
-// Λίστα χρεώσεων: ο admin βλέπει όλες, ο τεχνικός βλέπει μόνο τις δικές του
+// Λίστα χρεώσεων: όλοι οι συνδεδεμένοι χρήστες βλέπουν όλες τις χρεώσεις
+// (ποιος τεχνικός έχει τι χρεωμένο), αλλά μόνο ο ιδιοκτήτης ή ο admin μπορεί
+// να την αποχρεώσει (βλ. canAccess παρακάτω).
 router.get('/', (req, res) => {
-  const isAdmin = req.session.user.role === 'admin';
-  const rows = isAdmin
-    ? db.prepare(`
-        SELECT a.*, e.name AS equipment_name, e.serial_number, u.full_name AS technician_name
-        FROM assignments a
-        JOIN equipment e ON e.id = a.equipment_id
-        JOIN users u ON u.id = a.technician_id
-        ORDER BY a.assigned_at DESC
-      `).all()
-    : db.prepare(`
-        SELECT a.*, e.name AS equipment_name, e.serial_number, u.full_name AS technician_name
-        FROM assignments a
-        JOIN equipment e ON e.id = a.equipment_id
-        JOIN users u ON u.id = a.technician_id
-        WHERE a.technician_id = ?
-        ORDER BY a.assigned_at DESC
-      `).all(req.session.user.id);
+  const rows = db.prepare(`
+    SELECT a.*, e.name AS equipment_name, e.serial_number, u.full_name AS technician_name
+    FROM assignments a
+    JOIN equipment e ON e.id = a.equipment_id
+    JOIN users u ON u.id = a.technician_id
+    ORDER BY a.assigned_at DESC
+  `).all();
 
-  res.render('assignments/list', { assignments: rows, isAdmin });
+  res.render('assignments/list', { assignments: rows });
 });
 
 router.get('/new', (req, res) => {
@@ -84,9 +76,6 @@ router.get('/:id', (req, res) => {
   `).get(req.params.id);
 
   if (!assignment) return res.status(404).render('error', { message: 'Η χρέωση δεν βρέθηκε.' });
-  if (!canAccess(assignment, req.session.user)) {
-    return res.status(403).render('error', { message: 'Δεν έχετε δικαίωμα να δείτε αυτή τη χρέωση.' });
-  }
 
   res.render('assignments/detail', { assignment });
 });

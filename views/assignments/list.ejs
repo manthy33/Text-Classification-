@@ -1,5 +1,5 @@
 <%- include('../partials/header') %>
-<h1><%= isAdmin ? 'Όλες οι χρεώσεις' : 'Οι χρεώσεις μου' %></h1>
+<h1>Όλες οι χρεώσεις</h1>
 <div class="actions">
   <a href="/assignments/new" class="btn">Νέα χρέωση</a>
 </div>
@@ -8,7 +8,7 @@
     <tr>
       <th>Εξοπλισμός</th>
       <th>Παραλήπτης</th>
-      <% if (isAdmin) { %><th>Τεχνικός</th><% } %>
+      <th>Τεχνικός</th>
       <th>Ημ/νία χρέωσης</th>
       <th>Ημ/νία αποχρέωσης</th>
       <th>Κατάσταση</th>
@@ -20,7 +20,7 @@
     <tr>
       <td><%= a.equipment_name %> (<%= a.serial_number %>)</td>
       <td><%= a.assigned_to %></td>
-      <% if (isAdmin) { %><td><%= a.technician_name %></td><% } %>
+      <td><%= a.technician_name %></td>
       <td><%= a.assigned_at %></td>
       <td><%= a.returned_at || '-' %></td>
       <td>
