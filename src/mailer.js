@@ -1,38 +1,36 @@
-const nodemailer = require('nodemailer');
+// Στέλνουμε emails μέσω του HTTPS API της Resend αντί για SMTP socket, γιατί
+// πολλά hosting platforms (π.χ. Railway) μπλοκάρουν εντελώς τις θύρες SMTP
+// (25/465/587) αλλά ποτέ το HTTPS.
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
-const hasSmtpConfig = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
-
-const transporter = hasSmtpConfig
-  ? nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    })
-  : null;
-
-async function sendMail({ subject, text, html }) {
+async function sendMail({ subject, text }) {
   const to = process.env.NOTIFY_EMAIL;
   if (!to) {
     console.warn('[mailer] Δεν έχει οριστεί NOTIFY_EMAIL στο .env — παραλείπεται η αποστολή email.');
     return;
   }
-  if (!transporter) {
-    console.warn('[mailer] Δεν έχουν ρυθμιστεί στοιχεία SMTP στο .env — παραλείπεται η αποστολή email.');
+  if (!RESEND_API_KEY) {
+    console.warn('[mailer] Δεν έχει οριστεί RESEND_API_KEY στο .env — παραλείπεται η αποστολή email.');
     console.warn(`[mailer] Θα είχε σταλεί: "${subject}" -> ${to}`);
     return;
   }
   try {
-    await transporter.sendMail({
-      from: process.env.MAIL_FROM || process.env.SMTP_USER,
-      to,
-      subject,
-      text,
-      html,
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: process.env.MAIL_FROM || 'Equipment Manager <onboarding@resend.dev>',
+        to,
+        subject,
+        text,
+      }),
     });
+    if (!res.ok) {
+      console.error('[mailer] Αποτυχία αποστολής email:', res.status, await res.text());
+    }
   } catch (err) {
     console.error('[mailer] Αποτυχία αποστολής email:', err.message);
   }
