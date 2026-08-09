@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Πλάνο Τεχνικών</title>
+<style>
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --border: #e2e4e9;
+  --text: #1b1f24;
+  --text-muted: #6b7280;
+  --accent: #2563eb;
+  --scheduled: #2563eb;
+  --done: #16a34a;
+  --cancelled: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1115;
+    --surface: #1a1d23;
+    --border: #2a2e37;
+    --text: #e6e8eb;
+    --text-muted: #9aa0aa;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+header {
+  padding: 24px clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+header h1 { margin: 0 0 4px; font-size: 1.5rem; }
+.generated-at { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; }
+.controls { display: flex; gap: 12px; flex-wrap: wrap; }
+.controls input, .controls select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.controls input { flex: 1; min-width: 200px; }
+main { padding: 24px clamp(16px, 4vw, 48px) 48px; max-width: 1000px; margin: 0 auto; }
+.day-block { margin-bottom: 32px; }
+.day-block h2 { font-size: 1.1rem; text-transform: capitalize; margin-bottom: 12px; }
+.job-list { display: flex; flex-direction: column; gap: 10px; }
+.job-card {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--scheduled);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+.job-card.status-done { border-left-color: var(--done); }
+.job-card.status-cancelled { border-left-color: var(--cancelled); opacity: 0.7; }
+.job-time { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-muted); }
+.job-tech { font-weight: 600; }
+.job-task { margin-top: 2px; }
+.job-meta { margin-top: 2px; color: var(--text-muted); font-size: 0.85rem; }
+.job-status { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+.empty-state { color: var(--text-muted); padding: 40px 0; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Πλάνο Τεχνικών</h1>
+  <div class="generated-at">Ενημερώθηκε: 09/08/2026 19:09</div>
+  <div class="controls">
+    <input type="text" id="search" placeholder="Αναζήτηση (τεχνικός, εργασία, πελάτης, τοποθεσία)...">
+    <select id="tech-filter">
+      <option value="">Όλοι οι τεχνικοί</option>
+      <option value="Γιάννης Παπαδόπουλος">Γιάννης Παπαδόπουλος</option><option value="Μαρία Ιωάννου">Μαρία Ιωάννου</option><option value="Νίκος Δημητρίου">Νίκος Δημητρίου</option>
+    </select>
+  </div>
+</header>
+<main id="main">
+
+        <section class="day-block">
+          <h2>Monday 10/08/2026</h2>
+          <div class="job-list">
+            <article class="job-card status-scheduled" data-tech="Γιάννης Παπαδόπουλος">
+              <div class="job-time">08:00&ndash;10:00</div>
+              <div class="job-main">
+                <div class="job-tech">Γιάννης Παπαδόπουλος</div>
+                <div class="job-task">Επισκευή κλιματιστικού</div>
+                <div class="job-meta">Ξενοδοχείο Άλφα · Θεσσαλονίκη</div>
+              </div>
+              <div class="job-status">Προγραμματισμένο</div>
+            </article>
+            <article class="job-card status-done" data-tech="Νίκος Δημητρίου">
+              <div class="job-time">08:30&ndash;10:30</div>
+              <div class="job-main">
+                <div class="job-tech">Νίκος Δημητρίου</div>
+                <div class="job-task">Έλεγχος ηλεκτρικής εγκατάστασης</div>
+                <div class="job-meta">Γραφεία Γάμμα ΑΕ · Πάτρα</div>
+              </div>
+              <div class="job-status">Ολοκληρωμένο</div>
+            </article>
+            <article class="job-card status-scheduled" data-tech="Μαρία Ιωάννου">
+              <div class="job-time">09:00&ndash;12:00</div>
+              <div class="job-main">
+                <div class="job-tech">Μαρία Ιωάννου</div>
+                <div class="job-task">Εγκατάσταση θερμοσίφωνα</div>
+                <div class="job-meta">Πολυκατοικία Κέντρου · Αθήνα</div>
+              </div>
+              <div class="job-status">Προγραμματισμένο</div>
+            </article>
+            <article class="job-card status-scheduled" data-tech="Γιάννης Παπαδόπουλος">
+              <div class="job-time">11:00&ndash;13:00</div>
+              <div class="job-main">
+                <div class="job-tech">Γιάννης Παπαδόπουλος</div>
+                <div class="job-task">Συντήρηση ψυκτικού θαλάμου</div>
+                <div class="job-meta">Super Market Βήτα · Θεσσαλονίκη</div>
+              </div>
+              <div class="job-status">Προγραμματισμένο</div>
+            </article></div>
+        </section>
+        <section class="day-block">
+          <h2>Tuesday 11/08/2026</h2>
+          <div class="job-list">
+            <article class="job-card status-scheduled" data-tech="Μαρία Ιωάννου">
+              <div class="job-time">10:00&ndash;12:00</div>
+              <div class="job-main">
+                <div class="job-tech">Μαρία Ιωάννου</div>
+                <div class="job-task">Επισκευή κουζίνας</div>
+                <div class="job-meta">Εστιατόριο Δέλτα · Αθήνα</div>
+              </div>
+              <div class="job-status">Προγραμματισμένο</div>
+            </article>
+            <article class="job-card status-cancelled" data-tech="Νίκος Δημητρίου">
+              <div class="job-time">13:00&ndash;15:00</div>
+              <div class="job-main">
+                <div class="job-tech">Νίκος Δημητρίου</div>
+                <div class="job-task">Αντικατάσταση πίνακα</div>
+                <div class="job-meta">Κατοικία Παπαδάκη · Πάτρα</div>
+              </div>
+              <div class="job-status">Ακυρώθηκε</div>
+            </article></div>
+        </section>
+<p class="empty-state" id="empty-state" style="display:none;">Δεν βρέθηκαν αποτελέσματα.</p>
+</main>
+<script>
+const search = document.getElementById('search');
+const techFilter = document.getElementById('tech-filter');
+const cards = Array.from(document.querySelectorAll('.job-card'));
+const dayBlocks = Array.from(document.querySelectorAll('.day-block'));
+const emptyState = document.getElementById('empty-state');
+
+function applyFilters() {
+  const q = search.value.trim().toLowerCase();
+  const tech = techFilter.value;
+  let visibleTotal = 0;
+
+  dayBlocks.forEach(block => {
+    let visibleInBlock = 0;
+    block.querySelectorAll('.job-card').forEach(card => {
+      const matchesTech = !tech || card.dataset.tech === tech;
+      const matchesQuery = !q || card.textContent.toLowerCase().includes(q);
+      const show = matchesTech && matchesQuery;
+      card.style.display = show ? '' : 'none';
+      if (show) visibleInBlock++;
+    });
+    block.style.display = visibleInBlock ? '' : 'none';
+    visibleTotal += visibleInBlock;
+  });
+
+  emptyState.style.display = visibleTotal ? 'none' : 'block';
+}
+
+search.addEventListener('input', applyFilters);
+techFilter.addEventListener('change', applyFilters);
+</script>
+</body>
+</html>
